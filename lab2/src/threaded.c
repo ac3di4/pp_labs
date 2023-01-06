@@ -38,5 +38,7 @@ int main(int argc, char** argv)
     double total = (double)(end - start) / CLOCKS_PER_MS;
     printf("%.3f", total);
 
+    free(array);
+
     return 0;
 }
