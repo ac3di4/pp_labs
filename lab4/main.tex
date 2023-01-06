@@ -1,0 +1,246 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+\pgfplotsset{width=15cm, compat=1.18}
+\newgeometry{left=1.5 cm, right=1.5cm, top=1.5cm, bottom=1.5cm}
+
+\begin{document}
+
+
+% ---------------------------------- Титульник ----------------------------------
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+ \begin{center}
+  \vspace*{1cm}
+
+  \Huge
+  \textbf{Лабораторная работа №4}
+
+  \vspace{0.5cm}
+  \LARGE
+  ``Технология OpenMP. Особенности настройки''
+
+  \vspace{1.5cm}
+  Выполнил студент группы Б20-505\\
+  \textbf{Сорочан Илья}
+
+  \vfill
+
+  \Large
+  Московский Инженерно-Физический Интститут\\
+  Москва 2023
+
+ \end{center}
+\end{titlepage}
+
+
+% ---------------------------------- Рабочая среда ----------------------------------
+
+\section{Рабочая среда}
+
+Технические характеристики (вывод \textit{inxi}):
+\begin{verbatim}
+CPU: 6-core AMD Ryzen 5 4500U with Radeon Graphics (-MCP-)
+speed/min/max: 1396/1400/2375 MHz Kernel: 5.15.85-1-MANJARO x86_64 Up: 46m
+Mem: 2689.5/7303.9 MiB (36.8%) Storage: 238.47 GiB (12.6% used) Procs: 238
+Shell: Zsh inxi: 3.3.24
+\end{verbatim}
+
+Используемый компилятор:
+\begin{verbatim}
+gcc (GCC) 12.2.0
+\end{verbatim}
+
+Согласно \href{https://www.openmp.org/resources/openmp-compilers-tools/}{официальной документации} даная версия компилятора поддерживает \textit{OpenMP 5.0}
+
+
+% ---------------------------------- Работа с OpenMP ----------------------------------
+
+\section{Работа с \textit{OpenMP}}
+
+\subsection{Версия и дата принятия}
+
+Макрос \textit{\_OPENMP} является целочисленным числом и показывает дату принятия \textit{OpenMP} в формате \textit{yyyymm}, где \textit{yyyy} - год принятия, а \textit{mm} - месяц.
+
+Даты можно посмотреть на \href{https://www.openmp.org/specifications/}{официальном сайте \textit{OpenMP}}. но в своем коде я написал удобный макрос.
+
+\subsection{\textit{OMP\_DYNAMIC}}
+
+Переменная окружения \textit{OMP\_DYNAMIC} отвечает за динамический выбор числа потоков. Например если она имеет значение \textit{true}, то \textit{OpenMP} автоматически выбирает число потоков для \textit{parallel} участков. Если же \textit{false},
+
+\subsection{wtick}
+
+Функция \textit{omp\_get\_wtick()} возвращает количество секунд, прошедшее между тиками таймера из \textit{omp\_get\_wtime()}
+
+\subsection{Вложенность}
+
+Функция \textit{omp\_get\_nested()} возвращает флаг, указывающий на то включен ли вложеннный параллелилизм. Если да, то количество вложенных конструкций ограниченно числом, которое можно получить, вызвав \textit{omp\_get\_max\_active\_levels()}.
+
+\subsection{schedule}
+
+Переменная окружения \textit{OMP\_SCHEDULE} задаёт тип распределения нагрузки и размер чанков для всех директив циклов. Тип определяет как циклы делятся на подмножества итераций размером в один чанк:
+\begin{itemize}
+ \item \textit{static} -- все подмножества распределяются между потоками один раз, в самом начале;
+ \item \textit{dynamic} -- каждый из процессов получает чанк, по его выполнении он запрашивает новый. Так продолжается пока чанки не закончатся;
+ \item \textit{guided} -- аналогично \textit{dynamic}, однако он не содержит чанка, размер которого меньше заданного размера чанка;
+ \item \textit{auto} -- компилятор выбирает на свое усмотрение;
+ \item \textit{runtime} -- выбор производится непосредственно перед выполнением цикла.
+\end{itemize}
+
+\subsection{Пример использования \textit{omp\_lock}}
+
+Замки необходимы для обеспечения выболнения промежутка кода только одним потоком.
+Например чтение из файла.
+
+\begin{lstlisting}[language=C]
+omp_lock_t writelock;
+
+omp_init_lock(&writelock);
+
+#pragma omp parallel for
+for ( i = 0; i < x; i++ )
+{
+  // do something important
+  omp_set_lock(&writelock);
+  // do something important but only one thread access at a time
+  omp_unset_lock(&writelock);
+  // do another important task
+}
+
+omp_destroy_lock(&writelock);
+\end{lstlisting}
+
+\subsection{Разработанный код}
+
+Для иллюстрации директив \textit{OpenMP}, затронутых в данном разделе была разработна следующая программа:
+\lstinputlisting[language=C, basicstyle=\tiny]{src/omp_info.c}
+\vspace{0.5cm}
+
+
+% ---------------------------------- schedule ----------------------------------
+
+\section{Применение schedule}
+
+\subsection{Исходный код}
+
+В качестве примера я взял свой код из третьей лабораторной работы, однако переработал его, что бы при компиляции можно было указывать не только число потоков, но и расписание вместе с размером чанка:
+
+\lstinputlisting[language=C, basicstyle=\tiny]{src/main.c}
+\vspace{0.5cm}
+
+Скрипт так же был изменен:
+
+\lstinputlisting[language=Python, basicstyle=\tiny]{src/main.py}
+\vspace{0.5cm}
+
+Так же в этот раз я делал не по 10, а по 5 запусков на поток. Это связано с большим измеряемым объемом данных.
+
+\subsection{Графики}
+
+Для $schedule = static$:
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static_1.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static_100.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static_10000.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static_100000.csv};
+  \legend{Размер чанка не задан, Размер чанка 1, Размер чанка 100, Размер чанка 10000, Размер чанка 100000}
+ \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Для $schedule = dynamic$:
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_1.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_100.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_10000.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_100000.csv};
+  \legend{Размер чанка не задан, Размер чанка 1, Размер чанка 100, Размер чанка 10000, Размер чанка 100000}
+ \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+
+Для $schedule = guided$:
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided_1.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided_100.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided_10000.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided_100000.csv};
+  \legend{Размер чанка не задан, Размер чанка 1, Размер чанка 100, Размер чанка 10000, Размер чанка 100000}
+ \end{axis}
+\end{tikzpicture}
+
+\vspace{0.3cm}
+
+Из графиков видно, что значения по умолчанию являются оптимальными. Для остальных режимов (\textit{auto} и \textit{runtime}) чанки не указывались. Рассмотрим сравнение этих режимов:
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/auto.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/runtime.csv};
+  \legend{Режим \textit{static}, Режим \textit{dynamic}, Режим \textit{guided}, Режим \textit{auto}, Режим \textit{runtime}}
+ \end{axis}
+\end{tikzpicture}
+
+
+% ---------------------------------- Заключение ----------------------------------
+
+\section{Заключение}
+В данной работы были исследованы некоторые директивы \textit{OpenMP}. Была усовершенствована программа из третьей лабораторной работы. Модифицирован скрипт и произведены замеры с различными распределениями нагрузки в цикле.
+
+В ходе работы было выяснено, что тип распределения \textit{static} куда быстрее \textit{dynamic}.
+
+Хочу заметить, что при использовании \textit{static} многопоточная программа без оптимизаций выполняется гораздо быстрее однопоточной программы с ними (результаты в предыдущей лабораторной). Это говорит о том, что результаты многопоточных программ в третьей лабораторной работе могут быть улучшены.
+
+
+\end{document}
