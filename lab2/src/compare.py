@@ -13,7 +13,7 @@ def main():
 
     # skip header
     header = reader.__next__()
-    writer.writerow([header[0], header[-1]])
+    writer.writerow([header[0], "Efficiency"])
 
     # get first one
     first_avg = reader.__next__()[-1]
