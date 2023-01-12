@@ -1,0 +1,120 @@
+\pgfplotsset{width=10cm, compat=1.18}
+
+\section{Экспериментальные данные}
+
+\subsection{Модификации кода}
+
+Исходный код программы был модифицирован так, что бы:
+\begin{itemize}
+    \item Освобождалась \textbf{вся} выделенная память;
+    \item Производился запуск с несколькими потоками;
+    \item Замерялось время, затраченное на выполнение алгоритма.
+\end{itemize}
+
+На каждое число потоков отводилось 20 запусков.
+
+\subsection{Количество операций сравнения}
+
+В измерении количества операций сравнения нет смысла, ведь для однопоточной программы:
+\textit{O(n)}, как и для многопоточной (сравнения из \textit{reduction} -- сравнения с крайними элементами секций).
+
+\subsection{Время выполнения}
+
+Для начала я решил взглянуть не только на среднюю скорость выполнения, но и на крайние варианты:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/base.csv};
+    \addplot table [x index = 0, y index = 2, col sep=comma] {data/base.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/base.csv};
+    \legend{Худшее время, Лучшее время, Среднее время}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Крайне заметно, что однопотчная программа работает куда быстрее её конкурентов.
+Первая мысль, которая пришла мне в голову: причиной является относительная простота алгоритма.
+Тоесть вполне возможно, что программа тратит на подготовку к многопоточному исполнению времени больше, чем она от этого выигрывает.
+
+Другой мыслью были оптимизации, вносимые компилятором.
+Возможно однопоточную программу легче оптимизировать -- отсюда и разница в скорости:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/opt.csv};
+    \addplot table [x index = 0, y index = 2, col sep=comma] {data/opt.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/opt.csv};
+    \legend{Худшее время, Лучшее время, Среднее время}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Как видно на графике выше, предположение неверное. 
+Оптимизации уменьшают время исполнения программы вне зависимости от числа потоков.
+Общая тенденция остается такой же -- программа замедляется при увеличении числа потоков:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/base.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/opt.csv};
+    \legend{Без оптимизации, С оптимизацией}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+\subsection{Прирост производительности}
+
+Как уже было замечено ранее, в целом с увеличением числа потоков производительность падает.
+Рассмотрим ускорение многопоточной программы отностиельно однопоточной.
+Для неоптимизированной сборки:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков},
+        ylabel={Прирост (\%)},
+        ybar interval=0.7,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/cmp_base.csv};
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Для оптимизированной сборки:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков},
+        ylabel={Прирост (\%)},
+        ybar interval=0.7,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/cmp_opt.csv};
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}

@@ -1,0 +1,65 @@
+\appendix
+
+\titleformat{\section}[display]
+  {\normalfont\Large\bfseries}
+  {\centering Приложение\ \thesection\\}
+  {0pt}{\Large\centering}
+\renewcommand{\thesection}{\Asbuk{section}}
+
+\section{Использованные программные коды}
+
+Для проверки версии \textit{OpenMP} использовался следующий код:
+\lstinputlisting[language=C, basicstyle=\small]{code/omp_ver.c}
+\vspace{0.5cm}
+
+Для измерения времени исполнения алгоритма использовался следующий код (выводит \textit{csv} в стандартный вывод):
+\lstinputlisting[language=C, basicstyle=\tiny]{code/main.c}
+\vspace{0.5cm}
+
+Для вычисления эффективности многопоточной программы по отношению к однопоточной использовался следующий скрипт:
+\lstinputlisting[language=Python, basicstyle=\small]{code/compare.py}
+\vspace{0.5cm}
+
+\section{Таблицы c практическими результатами}
+
+Таблица без оптимизаций:
+
+\vspace{0.3cm}
+
+\pgfplotstabletypeset[
+ col sep=comma,
+ columns={Threads,Worst (ms),Best (ms),Avg (ms)},
+]{data/base.csv}
+
+\vspace{0.5cm}
+
+Таблица с оптимизациями:
+
+\vspace{0.3cm}
+
+\pgfplotstabletypeset[
+ col sep=comma,
+ columns={Threads,Worst (ms),Best (ms),Avg (ms)},
+]{data/opt.csv}
+
+\vspace{0.5cm}
+
+Таблица сравнений без оптимизаций:
+
+\vspace{0.3cm}
+
+\pgfplotstabletypeset[
+ col sep=comma,
+ columns={Threads,Efficiency},
+]{data/cmp_base.csv}
+
+\vspace{0.5cm}
+
+Таблица сравнений c оптимизациями:
+
+\vspace{0.3cm}
+
+\pgfplotstabletypeset[
+ col sep=comma,
+ columns={Threads,Efficiency},
+]{data/cmp_opt.csv}
