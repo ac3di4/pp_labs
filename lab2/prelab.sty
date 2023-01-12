@@ -1,0 +1,47 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{prelab}[Package for easy lab setuping]
+
+\usepackage[T2A]{fontenc}
+\usepackage[english, russian]{babel}
+\usepackage{geometry}
+\usepackage{indentfirst}
+
+\newgeometry{left=1.5 cm, right=1.5cm, top=1.5cm, bottom=1.5cm}
+
+\newcommand{\prefixlab}[2]{
+    \begin{titlepage}
+        \begin{center}
+        \vspace*{1cm}
+        
+        \Huge
+        \textbf{Лабораторная работа №#1}
+        
+        \vspace{0.5cm}
+        \LARGE
+        ``#2''
+        
+        \vspace{1.5cm}
+        Выполнил студент группы Б20-505\\
+        \textbf{Сорочан Илья}
+        
+        \vfill
+        
+        \Large
+        Московский Инженерно-Физический Интститут\\
+        Москва 2023
+        
+        \end{center}
+    \end{titlepage}
+
+    \section{Рабочая среда}
+
+    Технические характеристики:\\
+    CPU: \textit{6-core AMD Ryzen 5 4500U}\\
+    Kernel: \textit{5.15.85-1-MANJARO x86\_64}\\
+    Mem: \textit{7303.9 MiB}\\
+
+
+    Используется:\\
+    Компилятор: \textit{GCC 12.2.0}\\
+    OpenMP: \textit{4.5}
+}
