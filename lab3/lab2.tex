@@ -1,0 +1,32 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage{prelab}
+
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{titlesec}
+\usepackage{listings}
+
+\pgfplotsset{width=12cm, compat=1.18}
+
+\begin{document}
+
+\prefixlab{3}{Реализация алгоритма с использованием технологии \textit{OpenMP}}
+
+\include{algo.tex}
+\include{charts.tex}
+
+\section{Заключение}
+
+В данной работе было исследовано ускорение, получаемое при использовании многопоточности в задании о сортировке массива сортировкой Шелла.
+Была усовершенствована предоставленная программа и собранны данные.
+Так же был написан скрипт, подсчитываюший прирост производительности относительно одного потока.
+Оформлен отчет.
+
+В ходе работы было выяснено, что в данной задаче применение многопоточности лишь замедлит программу.
+Могу предположить, что это связано с распределением итераций главного цикла.
+
+\include{appendix.tex}
+
+\end{document}
