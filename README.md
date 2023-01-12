@@ -1,8 +1,7 @@
 # OSS Labs
 Done by Sorochan Ilya (group Б20-505)
 
-All reports in Russian \
-For reports `LuaTeX` is used.
+All reports in Russian
 
 ## Labs pdf shortcuts
 - [lab1](lab1/lab1.pdf)
