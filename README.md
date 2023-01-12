@@ -1,10 +1,13 @@
 # OSS Labs
 Done by Sorochan Ilya (group Б20-505)
 
-## Labs shortcuts
-- [lab1](lab1/main.pdf)
-- [lab2](lab2/main.pdf)
-- [lab3](lab3/main.pdf)
-- [lab4](lab4/main.pdf)
-- [lab5](lab5/main.pdf)
-- [lab6](lab6/main.pdf)
+All reports in Russian \
+For reports `LuaTeX` is used.
+
+## Labs pdf shortcuts
+- [lab1](lab1/lab1.pdf)
+- [lab2](lab2/lab2.pdf)
+- [lab3](lab3/lab3.pdf)
+- [lab4](lab4/lab4.pdf)
+- [lab5](lab5/lab5.pdf)
+- [lab6](lab6/lab6.pdf)
