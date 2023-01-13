@@ -1,0 +1,64 @@
+\section{Работа с \textit{OpenMP}}
+
+\subsection{Версия и дата принятия}
+
+Макрос \textit{\_OPENMP} является целочисленным числом и показывает дату принятия \textit{OpenMP} в формате \textit{yyyymm}, где \textit{yyyy} - год принятия, а \textit{mm} - месяц.
+Соответствие даты версии \textit{OpenMP} можно найти в интернете.
+
+\subsection{\textit{OMP\_DYNAMIC}}
+
+Переменная окружения \textit{OMP\_DYNAMIC} отвечает за динамический выбор числа потоков. Например если она имеет значение \textit{true}, то \textit{OpenMP} автоматически выбирает число потоков для \textit{parallel} участков.
+Если же \textit{false},
+
+\subsection{wtick}
+
+Функция \textit{omp\_get\_wtick()} возвращает количество секунд, прошедшее между тиками таймера из \textit{omp\_get\_wtime()}.
+\textit{wtime} возвращает количество прошедших секунд.
+
+Стоит отметить, что функция \textit{clock()}, предоставленная в стандартной библиотеке \textit{С} считает время использования \textit{CPU}.
+Тогда как \textit{omp\_wtime()} считает просто прошедшее время. 
+
+\subsection{Вложенность}
+
+Функция \textit{omp\_get\_nested()} возвращает флаг, указывающий на то включен ли вложенный параллелизм.
+Если он истинен, то количество вложенных конструкций ограниченно числом, которое можно получить, вызвав \textit{omp\_get\_max\_active\_levels()}.
+
+\subsection{schedule}
+
+Опция \textit{schedule} директивы \textit{for} задаёт тип распределения нагрузки и размер чанков. Тип определяет как циклы делятся на подмножества итераций -- чанки:
+\begin{itemize}
+ \item \textit{static} -- все подмножества распределяются между потоками один раз, в самом начале;
+ \item \textit{dynamic} -- каждый из процессов получает чанк, по его выполнении он запрашивает новый. Так продолжается пока чанки не закончатся;
+ \item \textit{guided} -- аналогично \textit{dynamic}, однако по мере выполнения чанков их размер уменьшается;
+ \item \textit{auto} -- компилятор выбирает на свое усмотрение;
+ \item \textit{runtime} -- выбор производится непосредственно перед выполнением программы через переменную окружения \textit{OMP\_SCHEDULE}.
+\end{itemize}
+
+\subsection{Пример использования \textit{omp\_lock}}
+
+Замки необходимы для обеспечения выполнении промежутка кода только одним потоком.
+Например чтение из файла.
+
+\begin{lstlisting}[language=C]
+omp_lock_t write_lock;
+
+omp_init_lock(&write_lock);
+
+#pragma omp parallel for
+for ( i = 0; i < x; i++ )
+{
+  // do something important
+  omp_set_lock(&write_lock);
+  // do something important but only one thread access at a time
+  omp_unset_lock(&write_lock);
+  // do another important task
+}
+
+omp_destroy_lock(&write_lock);
+\end{lstlisting}
+
+\subsection{Разработанный код}
+
+Для иллюстрации директив \textit{OpenMP}, затронутых в данном разделе была разработана следующая программа:
+\lstinputlisting[language=C, basicstyle=\tiny]{code/omp_info.c}
+\vspace{0.5cm}

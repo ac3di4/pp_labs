@@ -1,0 +1,99 @@
+\section{Применение \textit{schedule}}
+
+За основу был взят код из второй лабораторной.
+Число запусков на поток было уменьшено до 10.
+Использовалось \textit{schedule(runtime)}, которое затем менялось в различных тестах.
+
+Использованные исходные коды можно найти в приложении.
+
+\subsection{Графики}
+
+Для \textit{schedule = static}:
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static_10.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static_10000.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static_10000000.csv};
+  \legend{Размер чанка не задан, Размер чанка 10, Размер чанка 10000, Размер чанка 10000000}
+ \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Замечу, что компилятор сам выбирает оптимальное значение чанка.
+Его производительность является одной из лучших.
+
+Рассмотрим \textit{schedule = dynamic}:
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_10.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_10000.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_10000000.csv};
+  \legend{Размер чанка не задан, Размер чанка 10, Размер чанка 10000, Размер чанка 10000000}
+ \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+На удивление здесь стандартное значение показывает себя худшим образом.
+По умолчанию в режиме \textit{dynamic} размер чанка равен 1.
+
+Рассмотрим \textit{schedule = guided}:
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided_10.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided_10000.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided_10000000.csv};
+  \legend{Размер чанка не задан, Размер чанка 10, Размер чанка 10000, Размер чанка 10000000}
+ \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Здесь тенденция наблюдается положительная, за исключением чанков максимального размера.
+Разница между остальными размерами чанков не превышает нескольких миллисекунд. 
+
+Наконец, сравним лучшие из вышеприведенных результатов в автоматическим распределением \textit{schedule = auto}.
+На графике указан режим распределения и размер чанка (если он был задан вручную):
+
+\vspace{0.3cm}
+
+\begin{tikzpicture}
+ \begin{axis}[
+    xlabel={Число потоков},
+    ylabel={Время (мс)},
+    legend pos=north east,
+  ]
+  \addplot table [x index=0, y index=1, col sep=comma] {data/static.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/dynamic_10000.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/guided.csv};
+  \addplot table [x index=0, y index=1, col sep=comma] {data/auto.csv};
+  \legend{\textit{static}, \textit{dynamic 10000}, \textit{guided}, \textit{auto}}
+ \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
