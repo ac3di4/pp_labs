@@ -1,0 +1,62 @@
+\section{Экспериментальные данные}
+
+Код из первой лабораторной был немного изменен: было добавлено константное объявление значений сидов для генератора псевдослучайных чисел.
+Так же в программах использовалось 6 потоков/процессов.
+
+\subsection{Результаты выполнения}
+
+Рассмотрим результаты выполнения \textit{MPI}:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число процессов},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/mpi.csv};
+    \addplot table [x index = 0, y index = 2, col sep=comma] {data/mpi.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/mpi.csv};
+    \legend{Худшее время, Лучшее время, Среднее время}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Так же для чистоты эксперимента я решил обновить данные первой лабораторной работы:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/omp.csv};
+    \addplot table [x index = 0, y index = 2, col sep=comma] {data/omp.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/omp.csv};
+    \legend{Худшее время, Лучшее время, Среднее время}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Заметно ухудшение при использовании \textit{MPI}:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков/процессов},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/omp.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/mpi.csv};
+    \legend{\textit{OpenMP}, \textit{MPI}}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}

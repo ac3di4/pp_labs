@@ -1,0 +1,49 @@
+\section{Работа с \textit{MPI}}
+
+Стоит отметить, что в используемой мной среде для компиляции программ, поддерживающих \textit{MPI} обязательно использование специального компилятора \textit{mpicc}.
+
+Вывод программы в однопоточном режиме:
+\begin{tiny}
+\begin{verbatim}
+MPI Comm Size: 1;
+MPI Comm Rank: 0;
+Processor #0 has array: 788159773 2052308573 1377030627 1699618045 676203154 299802456 1767965774 1838448927 1686836254 1335355396
+Processor #0 checks items 0 .. 9;
+Processor #0 reports local max = 2052308573;
+
+*** Global Maximum is 2052308573;
+MPI Finalize returned (0);
+\end{verbatim}
+\end{tiny}
+
+Вывод программы в многопоточном режиме при запуске с 4-мя процессами:
+\begin{tiny}
+\begin{verbatim}
+MPI Comm Size: 4;
+MPI Comm Rank: 2;
+MPI Comm Size: 4;
+MPI Comm Rank: 3;
+MPI Comm Size: 4;
+MPI Comm Rank: 0;
+Processor #0 has array: 788159773 2052308573 1377030627 1699618045 676203154 299802456 1767965774 1838448927 1686836254 1335355396
+Processor #0 checks items 0 .. 1;
+Processor #0 reports local max = 2052308573;
+Processor #3 has array: 788159773 2052308573 1377030627 1699618045 676203154 299802456 1767965774 1838448927 1686836254 1335355396
+Processor #3 checks items 7 .. 9;
+Processor #3 reports local max = 1838448927;
+MPI Comm Size: 4;
+MPI Comm Rank: 1;
+Processor #1 has array: 788159773 2052308573 1377030627 1699618045 676203154 299802456 1767965774 1838448927 1686836254 1335355396
+Processor #1 checks items 2 .. 4;
+Processor #1 reports local max = 1699618045;
+Processor #2 has array: 788159773 2052308573 1377030627 1699618045 676203154 299802456 1767965774 1838448927 1686836254 1335355396
+Processor #2 checks items 5 .. 6;
+Processor #2 reports local max = 1767965774;
+MPI Finalize returned (0);
+
+*** Global Maximum is 2052308573;
+MPI Finalize returned (0);
+MPI Finalize returned (0);
+MPI Finalize returned (0);
+\end{verbatim}
+\end{tiny}
