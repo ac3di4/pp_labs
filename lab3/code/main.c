@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <omp.h>
 
 const int N = 1000000;
 const int MAX_THREADS = 16;
-const int RUNS_PER_THREAD = 20;
+const int RUNS_PER_THREAD = 10;
 
 void randArr(int *array, int size) {
     for (int i = 0; i < size; ++i)
@@ -13,7 +14,7 @@ void randArr(int *array, int size) {
 
 // run algo and return time elapsed
 double run(const int threads, int *array, const int size) {
-    clock_t start = clock();
+    double start = omp_get_wtime();
     int index = -1;
     #pragma omp parallel num_threads(threads) shared(array, size) default(none)
     for (int d = size / 2; d > 0; d /= 2) {
@@ -28,9 +29,8 @@ double run(const int threads, int *array, const int size) {
         }
     }
 
-    clock_t end = clock();
-    const double CLOCKS_PER_MS = (double)CLOCKS_PER_SEC / 1000;
-    return (double)(end - start) / CLOCKS_PER_MS;
+    double end = omp_get_wtime();
+    return (end - start) * 1000;
 }
 
 int main(int argc, char **argv) {
