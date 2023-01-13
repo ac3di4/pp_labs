@@ -1,0 +1,31 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage{prelab}
+
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{titlesec}
+\usepackage{listings}
+
+\pgfplotsset{width=14cm, compat=1.18}
+
+\begin{document}
+
+\prefixlab{4}{Технология \textit{OpenMP}. Особенности настройки}
+
+\include{omp.tex}
+\include{schedule.tex}
+
+\section{Заключение}
+
+В данной работе было исследовано ускорение, получаемое при использовании различных режимов распределения нагрузки (\textit{schedule}) в задании о поиске элемента.
+Была усовершенствована предоставленная программа и собранны данные.
+Так же был написан скрипт, осуществляющий сбор информации для разных параметров.
+Оформлен отчет.
+
+В ходе работы было выяснено, что в данной задаче разница в производительности небольшая.
+Лучше всего себя показали режимы \textit{dynamic 10000} и \textit{guided}.
+
+\include{appendix.tex}
+
+\end{document}

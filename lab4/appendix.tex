@@ -1,0 +1,17 @@
+\appendix
+
+\titleformat{\section}[display]
+  {\normalfont\Large\bfseries}
+  {\centering Приложение\ \thesection\\}
+  {0pt}{\Large\centering}
+\renewcommand{\thesection}{\Asbuk{section}}
+
+\section{Использованные программные коды}
+
+Для измерения времени исполнения алгоритма использовался следующий код (выводит \textit{csv} в стандартный вывод):
+\lstinputlisting[language=C, basicstyle=\tiny]{code/main.c}
+\vspace{0.5cm}
+
+Для вычисления сбора данных с разными параметрами был использован:
+\lstinputlisting[language=Bash, basicstyle=\small]{code/run.sh}
+\vspace{0.5cm}

@@ -1,0 +1,32 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage{prelab}
+
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{titlesec}
+\usepackage{listings}
+
+\pgfplotsset{width=12cm, compat=1.18}
+
+\begin{document}
+
+\prefixlab{5}{Технология \textit{MPI}. Введение}
+
+\include{mpi.tex}
+\include{compare.tex}
+
+\section{Заключение}
+
+В данной работе было исследовано ускорение, получаемое при использовании технологии \textit{MPI} в задании о поиске максимума.
+Была усовершенствована предоставленная программа и собраны данные.
+Так же был написан скрипт для сбора данных \textit{MPI}.
+Оформлен отчет.
+
+В ходе работы было выяснено, что применение \textit{MPI} в данной задаче негативно сказывается на временных показателях.
+Могу предположить, что причиной является затратная по времени операция пересылки массива.
+
+\include{appendix.tex}
+
+\end{document}

@@ -1,7 +1,8 @@
 # LaTeX
 *.aux
+*.fdb_latexmk
+*.fls
 *.log
-*.out
 *.synctex.gz
 
 # compilation result

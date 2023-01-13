@@ -1,0 +1,53 @@
+\appendix
+
+\titleformat{\section}[display]
+  {\normalfont\Large\bfseries}
+  {\centering Приложение\ \thesection\\}
+  {0pt}{\Large\centering}
+\renewcommand{\thesection}{\Asbuk{section}}
+
+\section{Использованные программные коды}
+
+Для проверки версии \textit{OpenMP} использовался следующий код:
+\lstinputlisting[language=C, basicstyle=\small]{code/omp_ver.c}
+\vspace{0.5cm}
+
+Код, использовавшийся для проверки функциональности \textit{MPI}
+\lstinputlisting[language=C, basicstyle=\tiny]{code/original.c}
+\vspace{0.5cm}
+
+Для измерения времени исполнения программы с использованием \textit{OpenMP} использовался следующий код(выводит \textit{csv} в стандартный вывод):
+\lstinputlisting[language=C, basicstyle=\tiny]{code/omp_main.c}
+\vspace{0.5cm}
+
+Для измерения времени исполнения программы с использованием \textit{MPI} использовался следующий код(выводит \textit{csv} в стандартный вывод):
+\lstinputlisting[language=C, basicstyle=\tiny]{code/mpi_main.c}
+\vspace{0.5cm}
+
+А так же для этой цели использовался скрипт:
+\lstinputlisting[language=Python, basicstyle=\tiny]{code/runmpi.py}
+\vspace{0.5cm}
+
+\section{Таблицы c практическими результатами}
+
+\textit{OpenMP}:
+
+\vspace{0.3cm}
+
+\pgfplotstabletypeset[
+ col sep=comma,
+ columns={Threads,Worst (ms),Best (ms),Avg (ms)},
+]{data/omp.csv}
+
+\vspace{0.5cm}
+
+\textit{MPI}:
+
+\vspace{0.3cm}
+
+\pgfplotstabletypeset[
+ col sep=comma,
+ columns={Threads,Worst (ms),Best (ms),Avg (ms)},
+]{data/mpi.csv}
+
+\vspace{0.5cm}
