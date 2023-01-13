@@ -1,0 +1,64 @@
+\section{Экспериментальные данные}
+
+В программах использовалось до 6 потоков/процессов и 10 запусков на поток/процесс.
+
+\subsection{Результаты выполнения}
+
+Рассмотрим результаты выполнения \textit{MPI}:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число процессов},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/mpi.csv};
+    \addplot table [x index = 0, y index = 2, col sep=comma] {data/mpi.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/mpi.csv};
+    \legend{Худшее время, Лучшее время, Среднее время}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+Так же для чистоты эксперимента я решил обновить данные первой лабораторной работы:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 1, col sep=comma] {data/omp.csv};
+    \addplot table [x index = 0, y index = 2, col sep=comma] {data/omp.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/omp.csv};
+    \legend{Худшее время, Лучшее время, Среднее время}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+В отличии от предыдущей лабораторной положительные тенденции заметны не только у \textit{OpenMP}:
+
+\vspace{0.5cm}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Число потоков/процессов},
+        ylabel={Время (мс)},
+        legend pos=north east,
+    ]
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/omp.csv};
+    \addplot table [x index = 0, y index = 3, col sep=comma] {data/mpi.csv};
+    \legend{\textit{OpenMP}, \textit{MPI}}
+    \end{axis}
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+При 6-ти потоках их производительность в данной задаче можно считать одинаковой.
+Однако разработка программы на \textit{MPI} заняла гораздо больше времени и ресурсов.
