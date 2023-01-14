@@ -28,18 +28,24 @@ void randArr(int *array, int size) {
 // run algo and return time elapsed
 double run(const int threads, int *array, const int size) {
     double start = omp_get_wtime();
-    #pragma omp parallel num_threads(threads) shared(array, size) default(none)
     for (int d = size / 2; d > 0; d /= 2) {
         const int cd = d;
-        #pragma omp for
-        for (int i = cd; i < size; ++i) {
-            for (int j = i - cd; j >= 0 && array[j] > array[j + cd]; j -= cd) {
-                int temp = array[j];
-                array[j] = array[j + cd];
-                array[j + cd] = temp;
+        #pragma omp parallel for num_threads(threads) shared(array, size, cd) default(none)
+        for (int i = 0; i < cd; ++i) {
+            // insertion sort
+            for (int j = cd + i; j < size; j += cd) {
+                int key = array[j];
+                int k = j - cd;
+
+                while (k >= i && array[k] > key) {
+                    array[k + cd] = array[k];
+                    k -= cd;
+                }
+                array[k + cd] = key;
             }
         }
     }
+
     double end = omp_get_wtime();
     return (end - start) * 1000;
 }
